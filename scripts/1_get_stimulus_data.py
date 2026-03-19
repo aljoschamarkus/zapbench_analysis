@@ -1,8 +1,7 @@
-import tensorstore as ts
 import numpy as np
+import tensorstore as ts
 import h5py
 from config import *
-import os
 
 os.makedirs(MAIN_DIR, exist_ok=True)
 

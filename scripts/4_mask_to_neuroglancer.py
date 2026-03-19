@@ -65,18 +65,34 @@ with viewer.txn() as s:
             """,
     )
 
-    s.layers["zap_bench_segmentation"] = ng.SegmentationLayer(
-        source=ng.LayerDataSource(
-            url="gs://zapbench-release/volumes/20240930/segmentation_xy_multiscale/|zarr3:",
-        )
-    )
+    for name, url, variant, matrix in LAYERS:
+        if variant == "image":
+            s.layers[name] = ng.ImageLayer(
+                source=ng.LayerDataSource(
+                    url=url,
+                    transform=ng.CoordinateSpaceTransform(
+                        matrix=matrix,
+                        output_dimensions=seg_dimensions,
+                    ),
+                ),
+            )
+        elif variant == "segmentation":
+            s.layers[name] = ng.SegmentationLayer(
+                source=ng.LayerDataSource(
+                    url=url,
+                    transform=ng.CoordinateSpaceTransform(
+                         matrix=matrix,
+                        output_dimensions=seg_dimensions,
+                    ),
+                ),
+            )
+        else:
+            print("invalid")
 
-    s.layers["zapbench_anatomy"] = ng.ImageLayer(
-        source=ng.LayerDataSource(
-            url="gs://zapbench-release/volumes/20240930/anatomy_clahe_ds_multiscale/|zarr3:",
-        )
-    )
-
+    s.layers["brain_shell"].visible = False
+    s.layers["mece1"].visible = False
+    s.layers["mece2"].visible = False
+    s.layers["mece3"].visible = False
     s.layout = "xy"
 
 print(viewer)

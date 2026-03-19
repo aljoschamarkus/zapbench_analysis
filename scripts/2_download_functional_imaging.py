@@ -1,7 +1,7 @@
-import tensorstore as ts
-import h5py as h5
-from tqdm import tqdm
 import numpy as np
+import tensorstore as ts
+from tqdm import tqdm
+import h5py as h5
 from config import *
 
 os.makedirs(DATA_DIR, exist_ok=True)

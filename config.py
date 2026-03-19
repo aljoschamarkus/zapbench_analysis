@@ -14,6 +14,28 @@ VOLUME_LIMS = {
     "z_max": 36,
 }
 
+TRANSFORMATION_MATRIX = [
+    [1,0,0,-450],
+    [0,1,0,-450],
+    [0,0,-1,74],
+]
+NULL_TRANSFORM = [
+    [1,0,0,0],
+    [0,1,0,0],
+    [0,0,1,0],
+]
+
+LAYERS = [
+    ["zap_bench_segmentation", "gs://zapbench-release/volumes/20240930/segmentation_xy_multiscale/|zarr3:", "segmentation", NULL_TRANSFORM],
+    ["zapbench_anatomy", "gs://zapbench-release/volumes/20240930/anatomy_clahe_ds_multiscale/|zarr3:", "image", NULL_TRANSFORM],
+    ["em_8nm", "precomputed://gs://fish2-derived/em_sofima_240112", "image", TRANSFORMATION_MATRIX],
+    ["brain_shell", "precomputed://gs://fish2-derived/fish2-brain-shell", "segmentation", TRANSFORMATION_MATRIX],
+    ["mece0", "precomputed://gs://fish2-derived/mece_250317/mece0", "segmentation", TRANSFORMATION_MATRIX],
+    ["mece1", "precomputed://gs://fish2-derived/mece_250317/mece1", "segmentation", TRANSFORMATION_MATRIX],
+    ["mece2", "precomputed://gs://fish2-derived/mece_250317/mece2", "segmentation", TRANSFORMATION_MATRIX],
+    ["mece3", "precomputed://gs://fish2-derived/mece_250317/mece3", "segmentation", TRANSFORMATION_MATRIX],
+]
+
 # to test sample comment above and uncomment below
 # Runtime estimate:
 #   scripts/1_get_stimulus_data.py ~1min
@@ -33,3 +55,4 @@ VOLUME_LIMS = {
 #     "z_min": 24,
 #     "z_max": 27,
 # }
+

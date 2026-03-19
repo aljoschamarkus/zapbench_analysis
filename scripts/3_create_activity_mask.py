@@ -1,9 +1,9 @@
-import h5py as h5
 import numpy as np
-from matplotlib.colors import hsv_to_rgb
 from pathlib import Path
-import tifffile as tiff
 from tqdm import tqdm
+import h5py as h5
+from matplotlib.colors import hsv_to_rgb
+import tifffile as tiff
 from config import *
 
 f_stim = h5.File(STIM_FILE, "r")
