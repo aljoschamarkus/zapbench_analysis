@@ -1,6 +1,6 @@
-import tifffile
 import neuroglancer as ng
-from utils import config
+import tifffile
+from config import *
 
 PORT = 8080
 
@@ -10,9 +10,7 @@ ng.set_server_bind_address("127.0.0.1", PORT)
 # host into local network
 # ng.set_server_bind_address("0.0.0.0", PORT)
 
-path = config.mask_path
-
-img = tifffile.imread(path) # shape: (z, y, x, c)
+img = tifffile.imread(TIF_FILE) # shape: (z, y, x, c)
 
 input_dimensions = ng.CoordinateSpace(
     names=["z", "y", "x", "c^"],
