@@ -48,11 +48,10 @@ for file in tqdm(sorted(Path(DATA_DIR).glob("*.h5"))):
     vy = stimuli[2] - stimuli[4]
 
     def vector_to_rgb(vx, vy):
-        # outliner insensitive colormap scaling
         mag = np.maximum(np.abs(vx), np.abs(vy))
-        scale = np.percentile(mag, 99)
+        scale = np.percentile(mag, 98)
         vx, vy = vx / (scale + 1e-6), vy / (scale + 1e-6)
-        hue = (np.arctan2(vy, vx) / (2 * np.pi)) % 1.0
+        hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) - 2 / 6) % 1.0)) % 1.0
         val = np.maximum(np.abs(vx), np.abs(vy))
         val = np.clip(val, 0, 1)
         sat = np.ones_like(val)

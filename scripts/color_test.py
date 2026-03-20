@@ -8,7 +8,9 @@ def vector_to_rgb(vx, vy):
     """
 
     # angle in [-pi, pi] -> hue in [0, 1)
-    hue = (np.arctan2(vy, vx) / (2 * np.pi)) % 1.0
+    # hue = (np.arctan2(vy, vx) / (2 * np.pi)) % 1.0
+    hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) + 4 / 6) % 1.0)) % 1.0
+    # hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) + 5 / 8) % 1.0)) % 1.0
 
     # brightness from L-infinity norm, clipped to [0, 1]
     val = np.maximum(np.abs(vx), np.abs(vy))
