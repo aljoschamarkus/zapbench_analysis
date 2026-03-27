@@ -3,6 +3,7 @@ import os
 MAIN_DIR = "/Users/aljoscha/Downloads/zapbench_data_thalamus"
 STIM_FILE = os.path.join(MAIN_DIR, "stim.h5")
 DATA_DIR = os.path.join(MAIN_DIR, "zapbench_aligned")
+DATA_FILE = os.path.join(MAIN_DIR, "zapbench_aligned.h5")
 TIF_FILE = os.path.join(MAIN_DIR, "activity_mask.tif")
 MASK_MIKE = os.path.join(MAIN_DIR, "colormapbigfull.tif")
 CSV_FILE = os.path.join(MAIN_DIR, "annotations.csv")
