@@ -2,9 +2,9 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 import h5py as h5
-from matplotlib.colors import hsv_to_rgb
 import tifffile as tiff
 from config import *
+from utils import vector_to_rgb
 
 f_stim = h5.File(STIM_FILE, "r")
 
@@ -24,9 +24,10 @@ list_conditions = [stim_on_t, forward_t, right_t, backward_t, left_t]
 
 z_slices = []
 
-for file in tqdm(sorted(Path(DATA_DIR).glob("*.h5"))):
+for file in tqdm(sorted(Path(DATA_DIR).glob("*.h5"), key=lambda p: int(p.stem.split("_")[-1]))):
     path_str = str(file)
     print(path_str)
+
     f = h5.File(path_str, 'r')
     imgs = f['data'][:,:,:]
     n_t = imgs.shape[2]
@@ -44,23 +45,12 @@ for file in tqdm(sorted(Path(DATA_DIR).glob("*.h5"))):
         img_bs = img_mean - img_0
         stimuli.append(img_bs)
 
-    vx = stimuli[1] - stimuli[3]
-    vy = stimuli[2] - stimuli[4]
+    vector_x = stimuli[1] - stimuli[3]
+    vector_y = stimuli[2] - stimuli[4]
 
-    def vector_to_rgb(vx, vy):
-        mag = np.maximum(np.abs(vx), np.abs(vy))
-        scale = np.percentile(mag, 98)
-        vx, vy = vx / (scale + 1e-6), vy / (scale + 1e-6)
-        hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) - 2 / 6) % 1.0)) % 1.0
-        val = np.maximum(np.abs(vx), np.abs(vy))
-        val = np.clip(val, 0, 1)
-        sat = np.ones_like(val)
-        hsv = np.stack([hue, sat, val], axis=-1)
-        rgb = hsv_to_rgb(hsv)
-        return rgb
-
-    rgb = vector_to_rgb(vx, vy)
-    z_slices.append(rgb)
+    # function in utils
+    rgb_matrix = vector_to_rgb(vector_x, vector_y, threshold=99.5)
+    z_slices.append(rgb_matrix)
 
 # create tif volume
 vol = np.zeros((72, 1328, 2048, 3), dtype=np.uint8)

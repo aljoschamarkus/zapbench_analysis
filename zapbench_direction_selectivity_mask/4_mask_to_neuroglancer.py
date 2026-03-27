@@ -1,6 +1,7 @@
 import numpy as np
 import neuroglancer as ng
 import tifffile
+import csv
 from pathlib import Path
 from config import *
 
@@ -54,7 +55,44 @@ if Path(MASK_MIKE).exists():
         [0, 0, 0, 1, 0]
     ]
 
+if not os.path.exists(CSV_FILE):
+    with open(CSV_FILE, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(['Annotation_ID','X','Y','Z'])
+        print(f"Created new log file: {CSV_FILE}")
+
+previous_annotation_count = 0
+
 viewer = ng.Viewer()
+
+def on_state_changed():
+    global previous_annotation_count
+
+    state = viewer.state
+
+    if "annotation" in state.layers:
+        layer = state.layers["annotation"]
+
+        if hasattr(layer, 'annotations'):
+            current_annotations = layer.annotations
+            current_count = len(current_annotations)
+
+            if current_count > previous_annotation_count:
+                new_annotation = current_annotations[-1]
+
+                if isinstance(new_annotation, ng.PointAnnotation):
+                    coords = new_annotation.point
+                    x1, y1, z1 = coords[0], coords[1], coords[2]
+
+                    point_id = getattr(new_annotation, 'id', f"point_{current_count}")
+
+                    with open(CSV_FILE, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([point_id,x1,y1,z1])
+
+                    previous_annotation_count += 1
+
+viewer.shared_state.add_changed_callback(on_state_changed)
 
 with viewer.txn() as s:
 
@@ -130,6 +168,19 @@ with viewer.txn() as s:
             print("invalid")
     for name, *_, visible in LAYERS:
         s.layers[name].visible = visible
+
+    s.layers["annotation"] = ng.AnnotationLayer(
+        source=ng.LayerDataSource(
+            url='local://annotations',
+            transform=ng.CoordinateSpaceTransform(
+                matrix=matrix_mask,
+                output_dimensions=output_dimensions,
+            ),
+        ),
+        # linked_segmentation_layer="mikes_mask",
+        annotations=[]
+    )
+
     s.layout = "xy"
 
 print(viewer)
