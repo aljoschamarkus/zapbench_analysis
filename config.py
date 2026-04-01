@@ -11,11 +11,11 @@ ROI_FILE = os.path.join(MAIN_DIR, "rois.h5")
 
 VOLUME_LIMS = {
     "x_min": 430,
-    "x_max": 710,
+    "x_max": 710,   # exclusive
     "y_min": 500,
-    "y_max": 810,
+    "y_max": 810,   # exclusive
     "z_min": 6,
-    "z_max": 19,
+    "z_max": 19,    # exclusive
 }
 
 # VOLUME_LIMS = {

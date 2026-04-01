@@ -1,10 +1,9 @@
 import numpy as np
-from pathlib import Path
 from tqdm import tqdm
 import h5py as h5
 import tifffile as tiff
 from config import *
-from utils import vector_to_rgb
+from utils import *
 
 f_stim = h5.File(STIM_FILE, "r")
 
@@ -45,9 +44,11 @@ vector_x = stimuli[1] - stimuli[3]
 vector_y = stimuli[2] - stimuli[4]
 
 rgb_block = vector_to_rgb(vector_x, vector_y, threshold=99.5)
-rgb_block_transposed = np.transpose(rgb_block, (0, 2, 1, 3))
+rgb_block_transposed = np.transpose(rgb_block, (0, 2, 1, 3)) # (z, y, x, rgb)
 
-vol = np.zeros((72, 1328, 2048, 3), dtype=np.uint8)
+d_shape = data_shape("z", "y", "x", "t") # (z, y, x, t)
+tiff_shape = (d_shape[0], d_shape[1], d_shape[2], 3) # (z, y, x, rgb) -> (72, 1328, 2048, 3)
+vol = np.zeros(tiff_shape, dtype=np.uint8)
 
 rgb_block_final = (255 * np.clip(rgb_block_transposed, 0, 1)).astype(np.uint8)
 vol[
