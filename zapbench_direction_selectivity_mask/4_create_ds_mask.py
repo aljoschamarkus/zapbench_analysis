@@ -20,7 +20,6 @@ left_t = f_stim["left_t"][:] - start_index
 
 list_conditions = [stim_on_t, forward_t, right_t, backward_t, left_t]
 
-print("loading data...")
 f_data = h5.File(DATA_FILE, "r")
 data = f_data["data"]
 
@@ -29,7 +28,6 @@ condition_t_valid = condition_t[(condition_t >= 0) & (condition_t < n_t)]
 vols_off = data[:, :, :, condition_t_valid]
 background_off = vols_off.mean(axis=3)
 
-print("extracting stimuli...")
 stimuli = []
 for cond_t in tqdm(list_conditions):
     cond_t = cond_t[(cond_t >= 0) & (cond_t < n_t)]
@@ -43,14 +41,14 @@ stimuli_np = np.array(stimuli)
 vector_x = stimuli[1] - stimuli[3]
 vector_y = stimuli[2] - stimuli[4]
 
-rgb_block = vector_to_rgb(vector_x, vector_y, threshold=99.5)
+rgb_block = vector_to_rgb(vector_x, vector_y, threshold=99)
 rgb_block_transposed = np.transpose(rgb_block, (0, 2, 1, 3)) # (z, y, x, rgb)
+rgb_block_final = (255 * np.clip(rgb_block_transposed, 0, 1)).astype(np.uint8)
 
 d_shape = data_shape("z", "y", "x", "t") # (z, y, x, t)
 tiff_shape = (d_shape[0], d_shape[1], d_shape[2], 3) # (z, y, x, rgb) -> (72, 1328, 2048, 3)
 vol = np.zeros(tiff_shape, dtype=np.uint8)
 
-rgb_block_final = (255 * np.clip(rgb_block_transposed, 0, 1)).astype(np.uint8)
 vol[
     VOLUME_LIMS["z_min"]:VOLUME_LIMS["z_max"],
     VOLUME_LIMS["y_min"]:VOLUME_LIMS["y_max"],

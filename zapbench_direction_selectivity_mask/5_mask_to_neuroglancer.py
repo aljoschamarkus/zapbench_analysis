@@ -1,7 +1,6 @@
 import numpy as np
 import neuroglancer as ng
 import tifffile
-import csv
 from pathlib import Path
 from config import *
 
@@ -9,9 +8,6 @@ PORT = 8080
 
 # host on device
 ng.set_server_bind_address("127.0.0.1", PORT)
-
-# host into local network
-# ng.set_server_bind_address("0.0.0.0", PORT)
 
 img = tifffile.imread(TIF_FILE) # shape: (z, y, x, c)
 
@@ -36,7 +32,7 @@ matrix_mask = [
     [0, 0, 0, 1, 0]
 ]
 
-seg_dimensions = ng.CoordinateSpace(
+spatial_dimensions = ng.CoordinateSpace(
     names=["x", "y", "z"],
     units=["nm", "nm", "nm"],
     scales=[406, 406, 4000],
@@ -55,44 +51,7 @@ if Path(MASK_MIKE).exists():
         [0, 0, 0, 1, 0]
     ]
 
-if not os.path.exists(CSV_FILE):
-    with open(CSV_FILE, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['Annotation_ID','X','Y','Z'])
-        print(f"Created new log file: {CSV_FILE}")
-
-previous_annotation_count = 0
-
 viewer = ng.Viewer()
-
-def on_state_changed():
-    global previous_annotation_count
-
-    state = viewer.state
-
-    if "annotation" in state.layers:
-        layer = state.layers["annotation"]
-
-        if hasattr(layer, 'annotations'):
-            current_annotations = layer.annotations
-            current_count = len(current_annotations)
-
-            if current_count > previous_annotation_count:
-                new_annotation = current_annotations[-1]
-
-                if isinstance(new_annotation, ng.PointAnnotation):
-                    coords = new_annotation.point
-                    x1, y1, z1 = coords[0], coords[1], coords[2]
-
-                    point_id = getattr(new_annotation, 'id', f"point_{current_count}")
-
-                    with open(CSV_FILE, mode='a', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow([point_id,x1,y1,z1])
-
-                    previous_annotation_count += 1
-
-viewer.shared_state.add_changed_callback(on_state_changed)
 
 with viewer.txn() as s:
 
@@ -150,7 +109,7 @@ with viewer.txn() as s:
                     url=url,
                     transform=ng.CoordinateSpaceTransform(
                         matrix=matrix,
-                        output_dimensions=seg_dimensions,
+                        output_dimensions=spatial_dimensions,
                     ),
                 ),
             )
@@ -160,7 +119,7 @@ with viewer.txn() as s:
                     url=url,
                     transform=ng.CoordinateSpaceTransform(
                          matrix=matrix,
-                        output_dimensions=seg_dimensions,
+                        output_dimensions=spatial_dimensions,
                     ),
                 ),
             )
@@ -169,18 +128,11 @@ with viewer.txn() as s:
     for name, *_, visible in LAYERS:
         s.layers[name].visible = visible
 
-    s.layers["annotation"] = ng.AnnotationLayer(
-        source=ng.LayerDataSource(
-            url='local://annotations',
-            transform=ng.CoordinateSpaceTransform(
-                matrix=matrix_mask,
-                output_dimensions=output_dimensions,
-            ),
-        ),
-        # linked_segmentation_layer="mikes_mask",
-        annotations=[]
+    s.layers["annotations"] = ng.LocalAnnotationLayer(
+        dimensions=spatial_dimensions,
     )
 
+    s.position = [586, 675, 15]
     s.layout = "xy"
 
 print(viewer)
