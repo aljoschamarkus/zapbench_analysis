@@ -1,6 +1,6 @@
 import tifffile
 
-path = "/Users/aljoscha/Downloads/colormapbigfull.tif"
+path = "/Users/aljoscha/Downloads/zapbench_data_thalamus/colormapbigfull.tif"
 img = tifffile.imread(path) # shape: (z, y, x, c)
 print(img.shape)
 
@@ -16,7 +16,9 @@ Data transfrom to match zapbench space:
 """
 
 # copy neuroglancer x, y, z voxel coordinates here
-x_zap, y_zap, z_zap = 1037, 736, 35
+# x_zap, y_zap, z_zap = 1037, 736, 35
+x_zap, y_zap, z_zap = 638, 716, 19
+
 
 # untransformed tiff (z, y, x)
 # z_tiff_c, y_tiff_c, x_tiff_c = 36, 1037, 591
