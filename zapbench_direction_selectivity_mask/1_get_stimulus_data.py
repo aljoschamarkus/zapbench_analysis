@@ -28,7 +28,7 @@ left     = stim_on_mask & (sin_dir == -1) & (cos_dir == 0)
 
 condition_t = np.where(condition_mask)[0]
 stim_off_t = np.where(stim_on_mask)[0]
-stim_on_t = np.where(stim_on_mask)[0]
+# stim_on_t = np.where(stim_on_mask)[0]
 forward_t  = np.where(forward)[0]
 right_t    = np.where(right)[0]
 backward_t = np.where(backward)[0]
@@ -37,7 +37,7 @@ left_t     = np.where(left)[0]
 with h5py.File(STIM_FILE, "w") as f:
     f.create_dataset("condition_t", data=condition_t)
     f.create_dataset("stim_off_t", data=stim_off_t)
-    f.create_dataset("stim_on_t", data=stim_on_t)
+    # f.create_dataset("stim_on_t", data=stim_on_t)
     f.create_dataset("forward_t", data=forward_t)
     f.create_dataset("right_t", data=right_t)
     f.create_dataset("backward_t", data=backward_t)

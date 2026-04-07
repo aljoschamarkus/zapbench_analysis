@@ -9,6 +9,10 @@ MASK_MIKE = os.path.join(MAIN_DIR, "colormapbigfull.tif")
 CSV_FILE = os.path.join(MAIN_DIR, "annotations.csv")
 ROI_FILE = os.path.join(MAIN_DIR, "rois.h5")
 
+MAIN_DIR_TRACES = "/Users/aljoscha/Downloads/zapbench_traces"
+TRACES_FILE = os.path.join(MAIN_DIR_TRACES, "zapbench_traces.h5")
+ZAP_DS = os.path.join(MAIN_DIR_TRACES, "zap_ds.h5")
+
 VOLUME_LIMS = {
     "x_min": 430,
     "x_max": 710,   # exclusive

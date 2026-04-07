@@ -1,3 +1,55 @@
+def stimulus_indices(path):
+    import h5py as h5
+    f_stim = h5.File(path, "r")
+
+    condition_t_full = f_stim["condition_t"][:]
+    start_index = condition_t_full.min()
+    # condition_t = condition_t_full - start_index
+
+    stim_off_t = f_stim["stim_off_t"][:] - start_index
+    forward_t = f_stim["forward_t"][:] - start_index
+    right_t = f_stim["right_t"][:] - start_index
+    backward_t = f_stim["backward_t"][:] - start_index
+    left_t = f_stim["left_t"][:] - start_index
+
+    list_conditions = [forward_t, right_t, backward_t, left_t]
+    return stim_off_t, list_conditions
+
+def ds_vectors(path, t_axis, condition_t, list_conditions):
+    from tqdm import tqdm
+    import h5py as h5
+    import numpy as np
+
+    f_data = h5.File(path, "r")
+    data = f_data["data"]
+
+    n_t = data.shape[t_axis]
+    condition_t_valid = condition_t[(condition_t >= 0) & (condition_t < n_t)]
+    print(len(condition_t_valid))
+    if t_axis == 0:
+        data_off = data[condition_t_valid, :]
+        print(data_off.shape)
+    else:
+        data_off = data[:, :, :, condition_t_valid]
+    background_off = data_off.mean(axis=t_axis)
+
+    stimuli = []
+    for cond_t in tqdm(list_conditions):
+        cond_t = cond_t[(cond_t >= 0) & (cond_t < n_t)]
+        if t_axis == 0:
+            data_t = data[cond_t, :]
+        else:
+            data_t = data[:, :, :, cond_t]
+        data_mean = data_t.mean(axis=t_axis)
+        img_bs = data_mean - background_off
+        stimuli.append(img_bs)
+
+    stimuli_np = np.array(stimuli)
+
+    vector_x = stimuli_np[0] - stimuli_np[2]
+    vector_y = stimuli_np[1] - stimuli_np[3]
+    return vector_x, vector_y
+
 def vector_to_rgb(vx, vy, threshold=98):
     import numpy as np
     from matplotlib.colors import hsv_to_rgb
@@ -29,3 +81,48 @@ def data_shape(var1, var2, var3, var4):
     }
     output = (order[var1], order[var2], order[var3], order[var4])
     return output
+
+def img_to_ng(layers):
+    import neuroglancer as ng
+    from numpy import min, max
+    PORT = 8080
+    ng.set_server_bind_address("127.0.0.1", PORT)
+
+    in_dimensions = ng.CoordinateSpace(
+        names=["z", "y", "x"],
+        scales=[1, 1, 1],
+    )
+
+    out_dimensions = ng.CoordinateSpace(
+        names=["x", "y", "z"],
+        scales=[1, 1, 1],
+    )
+
+    matrix = [
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+    ]
+
+    viewer = ng.Viewer()
+
+    with viewer.txn() as s:
+        for name, img in layers.items():
+            img_scaled = (img-min(img))/(max(img)-min(img))
+            s.layers[name] = ng.ImageLayer(
+                source=ng.LayerDataSource(
+                    url=ng.LocalVolume(
+                        data=img_scaled,
+                        dimensions=in_dimensions,
+                    ),
+                    transform=ng.CoordinateSpaceTransform(
+                    matrix=matrix,
+                    output_dimensions=out_dimensions,
+                    )
+                )
+            )
+
+        s.layout = "xy"
+
+    print(viewer)
+    input("stop server...")

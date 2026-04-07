@@ -32,6 +32,6 @@ for blob in blobs:
 
 ax2.set_title('blob detection on activity correlation')
 ax2.axis('off')
-# plt.show()
-plt.savefig('/Users/aljoscha/Downloads/blob_detection.png')
-plt.close()
+plt.show()
+# plt.savefig('/Users/aljoscha/Downloads/blob_detection.png')
+# plt.close()
