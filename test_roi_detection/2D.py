@@ -18,7 +18,7 @@ std_t = smoothed.std(axis=2, keepdims=True) + 1e-8
 zdata = (smoothed - mean_t) / std_t
 # 3) local neighborhood mean trace excluding center pixel
 local_mean = np.empty_like(zdata)
-for t in range(zdata.shape[23]):
+for t in range(zdata.shape[2]):
     local_mean[:, :, t] = sciimg.uniform_filter(zdata[:, :, t], size=7)
 
 local_mean = (49 * local_mean - zdata) / 48
