@@ -23,7 +23,7 @@ BETA = 0.1    # reward compact growthx
 # ----------------------------
 # Load image
 # ----------------------------
-with h5.File(ROI_FILE, "r") as f:
+with h5.File(ACTIVITY_CORRELATION_H5, "r") as f:
     image = f["data"][:, :]
 
 

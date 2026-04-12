@@ -4,7 +4,7 @@ import scipy.ndimage as sciimg
 from config import *
 from utils import img_to_ng
 
-f = h5.File(DATA_FILE, "r")
+f = h5.File(FUNCTIONAL_IMG_H5, "r")
 
 z_slice_temporal = f['data'][8:11, :, :, :]
 img_original = z_slice_temporal.mean(axis=3)
@@ -31,7 +31,7 @@ local_mean_z = (local_mean - lm_mean) / lm_std
 # 5) temporal correlation map
 corr_map = np.mean(zdata * local_mean_z, axis=3)
 
-with h5.File(ROI_FILE, "w") as f:
+with h5.File(ACTIVITY_CORRELATION_H5, "w") as f:
     dset = f.create_dataset("data", data=corr_map, compression="gzip")
 
 print(corr_map.shape)

@@ -2,7 +2,7 @@ import tensorstore as ts
 import h5py as h5
 from config import *
 
-f_stim = h5.File(STIM_FILE, "r")
+f_stim = h5.File(STIM_H5, "r")
 condition_t = f_stim["condition_t"][:]
 
 ds = ts.open({
@@ -14,5 +14,5 @@ ds = ts.open({
 data = ds[condition_t[0]:condition_t[-1]+1,:].read().result()
 print(data.shape)
 
-with h5.File(TRACES_FILE, "w") as f:
+with h5.File(TRACES_H5, "w") as f:
     dset = f.create_dataset("data", data=data, compression="gzip")

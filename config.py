@@ -1,17 +1,21 @@
 import os
 
 MAIN_DIR = "/Users/aljoscha/Downloads/zapbench_data_thalamus"
-STIM_FILE = os.path.join(MAIN_DIR, "stim.h5")
-DATA_DIR = os.path.join(MAIN_DIR, "zapbench_aligned")
-DATA_FILE = os.path.join(MAIN_DIR, "zapbench_aligned.h5")
-TIF_FILE = os.path.join(MAIN_DIR, "activity_mask.tif")
-MASK_MIKE = os.path.join(MAIN_DIR, "colormapbigfull.tif")
-CSV_FILE = os.path.join(MAIN_DIR, "annotations.csv")
-ROI_FILE = os.path.join(MAIN_DIR, "rois.h5")
 
-MAIN_DIR_TRACES = "/Users/aljoscha/Downloads/zapbench_traces"
-TRACES_FILE = os.path.join(MAIN_DIR_TRACES, "zapbench_traces.h5")
-ZAP_DS = os.path.join(MAIN_DIR_TRACES, "zap_ds.h5")
+STIM_H5 = os.path.join(MAIN_DIR, "stim.h5")
+
+FUNCTIONAL_IMG_DIR = os.path.join(MAIN_DIR, "zapbench_aligned")
+FUNCTIONAL_IMG_H5 = os.path.join(MAIN_DIR, "zapbench_aligned.h5")
+
+DS_MASK = os.path.join(MAIN_DIR, "activity_mask.tif")
+DS_MASK_MIKE = os.path.join(MAIN_DIR, "colormapbigfull.tif")
+
+TRACES_H5 = os.path.join(MAIN_DIR, "zapbench_traces.h5")
+ZAP_DS_H5 = os.path.join(MAIN_DIR, "zap_ds.h5")
+
+NEUPRINT_NEURONS_CSV = os.path.join(MAIN_DIR, "ds_neurons.csv")
+
+ACTIVITY_CORRELATION_H5 = os.path.join(MAIN_DIR, "rois.h5")
 
 VOLUME_LIMS = {
     "x_min": 430,
@@ -55,3 +59,112 @@ LAYERS = [
     # ["mece2", "precomputed://gs://fish2-derived/mece_250317/mece2", "segmentation", TRANSFORMATION_MATRIX_EM, False],
     # ["mece3", "precomputed://gs://fish2-derived/mece_250317/mece3", "segmentation", TRANSFORMATION_MATRIX_EM, False],
 ]
+
+THALAMIC_DS_ZAP_ID = [
+7556,
+19975,
+21691,
+21516,
+20026,
+7638,
+7556,
+8972,
+8972,
+8986,
+20085,
+19883,
+8914,
+19893,
+21484,
+7638,
+21513,
+8969,
+8999,
+31816,
+7715,
+8925,
+8938,
+8924,
+7589,
+8925,
+19878,
+21508,
+21697,
+19975,
+21506,
+21490,
+8924,
+19806,
+8925,
+19767,
+21452,
+7650,
+21644,
+19883,
+19893,
+19878
+]
+
+PRETECTAL_DS_ZAP_ID = [
+22400,
+22179,
+32767,
+22145,
+22145,
+24239,
+22361,
+22361,
+22343,
+22343,
+22353,
+22342,
+9739,
+10183,
+9797,
+9831,
+9573,
+9573,
+9648,
+11559,
+9465,
+9481,
+9486,
+9525,
+9546,
+9572,
+9625,
+9627,
+9762,
+22006,
+22020,
+22336,
+22356,
+22360,
+22428,
+22499,
+24127,
+32743,
+9465,
+9481,
+9486,
+9525,
+9546,
+9572,
+9625,
+9627,
+9762,
+22006,
+22020,
+22336,
+22356,
+22360,
+22428,
+22499,
+24127,
+32743
+]
+
+NEURONS_DS_ZAP_ID = {
+    "Thalamus": set(THALAMIC_DS_ZAP_ID),
+    "Pretectum": set(PRETECTAL_DS_ZAP_ID),
+}

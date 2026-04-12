@@ -25,7 +25,7 @@ def ds_vectors(path, t_axis, condition_t, list_conditions):
 
     n_t = data.shape[t_axis]
     condition_t_valid = condition_t[(condition_t >= 0) & (condition_t < n_t)]
-    print(len(condition_t_valid))
+
     if t_axis == 0:
         data_off = data[condition_t_valid, :]
         print(data_off.shape)
@@ -56,7 +56,8 @@ def vector_to_rgb(vx, vy, threshold=98):
     mag = np.maximum(np.abs(vx), np.abs(vy))
     scale = np.percentile(mag, threshold)
     vx, vy = vx / (scale + 1e-6), vy / (scale + 1e-6)
-    hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) - 2 / 6) % 1.0)) % 1.0
+    # hue = (1.0 - ((np.arctan2(vy, vx) / (2 * np.pi) - 2 / 6) % 1.0)) % 1.0
+    hue = (np.arctan2(vy, vx) / (2 * np.pi) + 2 / 6) % 1.0
     val = np.maximum(np.abs(vx), np.abs(vy))
     val = np.clip(val, 0, 1)
     sat = np.ones_like(val)
@@ -126,3 +127,34 @@ def img_to_ng(layers):
 
     print(viewer)
     input("stop server...")
+
+def rgb_to_hex(rgb):
+    import numpy as np
+    rgb = np.clip(np.asarray(rgb), 0, 1)
+    return "#{:02x}{:02x}{:02x}".format(
+        int(round(rgb[0] * 255)),
+        int(round(rgb[1] * 255)),
+        int(round(rgb[2] * 255)),
+    )
+
+def vector_sector(vx, vy, value=1.0):
+    if vx == 0 and vy == 0:
+        return None, "Zero", "#000000"
+    import numpy as np
+    from matplotlib.colors import hsv_to_rgb, rgb_to_hsv
+    SECTOR_NAMES = ["Forward", "FR", "Right", "BR", "Back", "BL", "Left", "FL"]
+
+    angle = np.arctan2(vy, vx) % (2 * np.pi)
+    sector_idx = int(((angle + np.pi / 8) % (2 * np.pi)) // (np.pi / 4))
+    sector_name = SECTOR_NAMES[sector_idx]
+
+    center_angle = sector_idx * (np.pi / 4)
+
+    # same style as your hue mapping, but using sector center
+    hue = (center_angle / (2 * np.pi) + 2 / 6) % 1.0
+
+    rgb = hsv_to_rgb([hue, 1.0, value])
+    hex_color = rgb_to_hex(rgb)
+
+    # return sector_idx, sector_name, hex_color
+    return [sector_idx, hex_color]

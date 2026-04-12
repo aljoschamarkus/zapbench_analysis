@@ -1,6 +1,6 @@
 import pandas as pd
 
-path = "/Users/aljoscha/Downloads/ds_thalamic_neurons.csv"
+path = "/Users/aljoscha/Downloads/zapbench_data_thalamus/ds_thalamic_neurons.csv"
 df = pd.read_csv(path)
 
 cols = ["contralateral", "AF56", "tectal_neuropil"]

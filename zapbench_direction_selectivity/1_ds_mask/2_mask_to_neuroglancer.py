@@ -9,7 +9,7 @@ PORT = 8080
 # host on device
 ng.set_server_bind_address("127.0.0.1", PORT)
 
-img = tifffile.imread(TIF_FILE) # shape: (z, y, x, c)
+img = tifffile.imread(DS_MASK) # shape: (z, y, x, c)
 
 input_dimensions = ng.CoordinateSpace(
     names=["z", "y", "x", "c^"],
@@ -41,8 +41,8 @@ spatial_dimensions = ng.CoordinateSpace(
 img_mike_mask_flipped = None
 matrix_mask_mike = None
 
-if Path(MASK_MIKE).exists():
-    img_mike_mask = tifffile.imread(MASK_MIKE)
+if Path(DS_MASK_MIKE).exists():
+    img_mike_mask = tifffile.imread(DS_MASK_MIKE)
     img_mike_mask_flipped = np.flip(img_mike_mask, axis=2)
     matrix_mask_mike = [
         [0, 1, 0, 0, 0],

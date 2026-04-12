@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 from config import *
 
-f = h5.File(ROI_FILE, "r")
+f = h5.File(ACTIVITY_CORRELATION_H5, "r")
 corr_map = f['data'][:,:]
 
 from skimage.filters import threshold_otsu
