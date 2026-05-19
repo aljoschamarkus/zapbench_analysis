@@ -104,7 +104,6 @@ $$
 \mathbf{v} =
 (
 \text{response}_{\text{right}} - \text{response}_{\text{left}},
-\;
 \text{response}_{\text{forward}} - \text{response}_{\text{backward}}
 )
 $$
@@ -148,11 +147,7 @@ r = \max(|x|, |y|)
 $$
 
 
-$$
-(x_{\text{circ}}, y_{\text{circ}})
-=
-(r\sin(\theta), r\cos(\theta))
-$$
+$$(x_{\text{circ}}, y_{\text{circ}})=(r\sin(\theta), r\cos(\theta))$$
 
 $$
 \text{magnitude}_{\text{circ}} = \sqrt{x_{\text{circ}}^2 + y_{\text{circ}}^2} $$
