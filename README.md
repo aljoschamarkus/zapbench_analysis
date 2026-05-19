@@ -100,16 +100,22 @@ n_{\text{stim}}
 From the responses towards the 4 stimulus directions a vector was calculated by subtracting opposing directions in the same dimension.
 The direction $\theta$ of the vector encodes the direction of selectivity and its length the $\text{magnitude}$.
 
-$$\mathbf{v} =
-\begin{pmatrix}
+$$
+\mathbf{v} =
+\left(
+\begin{array}{c}
 x \\
 y
-\end{pmatrix}
+\end{array}
+\right)
 =
-\begin{pmatrix}
+\left(
+\begin{array}{c}
 \text{response}_{\text{right}} - \text{response}_{\text{left}} \\
 \text{response}_{\text{forward}} - \text{response}_{\text{backward}}
-\end{pmatrix}$$
+\end{array}
+\right)
+$$
 
 $$
 \theta = \mathrm{atan2}(x,y) \bmod 2\pi
