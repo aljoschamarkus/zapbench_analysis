@@ -102,19 +102,11 @@ The direction $\theta$ of the vector encodes the direction of selectivity and it
 
 $$
 \mathbf{v} =
-\left(
-\begin{array}{c}
-x \\
-y
-\end{array}
-\right)
-=
-\left(
-\begin{array}{c}
-\text{response}_{\text{right}} - \text{response}_{\text{left}} \\
+(
+\text{response}_{\text{right}} - \text{response}_{\text{left}},
+\;
 \text{response}_{\text{forward}} - \text{response}_{\text{backward}}
-\end{array}
-\right)
+)
 $$
 
 $$
@@ -157,15 +149,9 @@ $$
 
 
 $$
-\begin{pmatrix}
-x_{\text{circ}} \\
-y_{\text{circ}}
-\end{pmatrix}
+(x_{\text{circ}}, y_{\text{circ}})
 =
-\begin{pmatrix}
-r \sin(\theta) \\
-r \cos(\theta)
-\end{pmatrix}
+(r\sin(\theta), r\cos(\theta))
 $$
 
 $$
