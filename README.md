@@ -63,15 +63,22 @@ The data for the analysis in this project is from the following sources, the  Go
 |   |    |-[...]
 ```
 
+## Credits
+
+This analysis pipeline is part of a bigger project about direction selectivity within thalamic circuits in the larva zebrafish visual system.
+Most of this work is following up on hypotheses based on the experiments of Sabine Renninger and Ruth Diez del Corral. 
+The entire logic behind quantifying direction selectivity is based on Mike Orgers expertise and the direction selectivity colormap is replicated from his implementation, also the coding implementation, especially the cypher queries, are heavily relying on Aaron Ostrovskys knowledge.
+
 ## Introduction
 
-Use EM and functional imaging to disect direction selectivity computation on the circuit level
+In this project previous work in the lab found direction selective neurons in both the pretectum and the thalamus. 
+While the pretectal population is rather mixed in the thalamus they make up a topographic map of direction selectivity.
+It is known that the flow of visual information in the zebrafish is passed on from the retina by Retinal Ganglion Cells (RGC) to the Aborization Fields (AF) especially AF5 is involved in processing direction selective information.
 
-Sabines work -> topographic map of direction selectivity in the thalamus
-
-previously known that af5 direction selective
-
-flow of information: RGC -> AF5 -> Pretectum -> Thalamus
+With the availability of a whole brain functional imaging and a corresponding electron microscopy (EM) dataset new opportunities for investigating circuit motifs arose.
+Initially a method of determining direction selectivity of neurons was established with the functional imaging, from there on neurons of interest had to be identified and finally translated into the EM dataset.
+There the neuron selection had to be refined based on morphology and projection patterns. Within the connectome input cells and eventually circuit motives were analysed mostly limited to pretectal populations.
+By using direct connectivity alongside direction selectivity information a hypothesis about the sign of ipsi- and contralateral projections could be formed which could then be further supported by neurotransmitter analysis in the fish1 dataset
 
 ### 1. Finding direction selective neurons 
 
@@ -198,10 +205,20 @@ $$I_{\text{exc}}=
 
 ## Usage
 
+### Setup
+- Download [**colormapbigfull.tif**](https://drive.google.com/file/d/1ydAAZFxeUDRwJVTQHaeCtv_hAXIT3Az1/view?usp=drive_link) and adjust `path_ds_mask` in [ds_mask_to_neuroglancer.py](./ds_mask_to_neuroglancer.py) accordingly.
+- Coppy [**neuprint authorization key**](https://neuprint-fish2.janelia.org/account) and adjust `os.environ['NEUPRINT_APPLICATION_CREDENTIALS'] = AUTH_TOKEN` in [zap_ids_to_em_neuroglancer.py](./zap_ids_to_em_neuroglancer.py) by replacing `AUTH_TOKEN` with your authorization key as a string (wrapped in "").
+- Adjust `path_traces = "..."` in both [get_zap_traces.py](./get_zap_traces.py) and [zap_ids_to_em_neuroglancer.py](./zap_ids_to_em_neuroglancer.py) to the same rootpath where data should be stored (keep .h5 suffix).
+
 ### 1. Select direction selective neurons
 
+- Run [`1_download_stimulus_turning.py`](./scripts/2_zap_neurons_to_em_ng/1_download_stimulus_turning.py)
+- Run [`1_download_stimulus_turning.py`](./scripts/2_zap_neurons_to_em_ng/1_download_aligned.py) (requires `zap_stimulus_turning.h5`)
+- Run
 
 ## Achievements
+
+
 
 custom volume to ng
 manual selection of ds neurons (colormap)
@@ -228,19 +245,22 @@ final:
 by combining direction selectivity information of functional imaging (zap) with anatomy and connectivity (fish2 em) and neurotranmitter identity/ indication of excitatory or inhibitory from the confocal imaging (fish1) population of neurons of particular anatomy, flow of information and circuit schema could be found
 
 ## Notes:
-Data introduction
-Goal introduction
-Project structure introduction
-deutilise
-Requirements pip install
+
+- code notes
+  - supplement
+  - problem color coding colormap
+  - not mece mask
+  - note potential new ccu masks
+  - note local ds threshold
+  - note zap - em /zap - zap matching
+  - current em color coding independent 
+
 Jupyter notebook
 Batch attempt
 Estimated storage
 Estimated runtime
 Make layers invisible
 Add exploratory test namely
-Filtering spatialy
-Threshold ds
 reference lines?
 reference Aarons cave query
 pipeline schema
