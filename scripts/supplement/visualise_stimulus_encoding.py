@@ -3,7 +3,7 @@ from config import *
 import matplotlib.pyplot as plt
 import tensorstore as ts
 
-f_stim = h5.File(STIM_H5, "r")
+f_stim = h5.File(PATHS.in_data("zap_stimulus_turning.h5"), "r")
 condition_t_full = f_stim["condition_t"][:]
 
 start_index = condition_t_full.min()

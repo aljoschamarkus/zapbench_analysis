@@ -2,7 +2,6 @@ import h5py as h5
 import numpy as np
 import scipy.ndimage as sciimg
 from config import *
-from utils import img_to_ng
 
 f = h5.File(FUNCTIONAL_IMG_H5, "r")
 

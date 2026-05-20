@@ -1,21 +1,56 @@
-import os
+from pathlib import Path
 
-MAIN_DIR = "/Users/aljoscha/Downloads/zapbench_data_thalamus"
+class Paths:
+    def __init__(self, base: Path, create: bool=True):
+        self.base = base
+        self.data = base / "data"
+        self.tiff = base / "tiff_stacks"
+        self.neurons = base / "neuron_tables"
+        self.plots = base / "plots"
 
-STIM_H5 = os.path.join(MAIN_DIR, "stim.h5")
+        if create:
+            self._create_dirs()
 
-FUNCTIONAL_IMG_DIR = os.path.join(MAIN_DIR, "zapbench_aligned")
-FUNCTIONAL_IMG_H5 = os.path.join(MAIN_DIR, "zapbench_aligned.h5")
+    def _create_dirs(self):
 
-DS_MASK = os.path.join(MAIN_DIR, "activity_mask.tif")
-DS_MASK_MIKE = os.path.join(MAIN_DIR, "colormapbigfull.tif")
+        for path in [
 
-TRACES_H5 = os.path.join(MAIN_DIR, "zapbench_traces.h5")
-ZAP_DS_H5 = os.path.join(MAIN_DIR, "zap_ds.h5")
+            self.base,
 
-NEUPRINT_NEURONS_CSV = os.path.join(MAIN_DIR, "ds_neurons.csv")
+            self.data,
 
-ACTIVITY_CORRELATION_H5 = os.path.join(MAIN_DIR, "rois.h5")
+            self.tiff,
+
+            self.neurons,
+
+            self.plots,
+
+        ]:
+            path.mkdir(parents=True, exist_ok=True)
+
+    def in_data(self, name):
+        return self.data / name
+    def in_tiff(self, name):
+        return self.tiff / name
+    def in_neurons(self, name):
+        return self.neurons / name
+    def in_plots(self, name):
+        return self.plots / name
+
+GS = {
+    "zap_stimuli": ['zarr', 'gs://zapbench-release/volumes/20240930/stimuli_features'],
+    "zap_aligned": ['zarr3', 'gs://zapbench-release/volumes/20240930/aligned'],
+    "zap_segmentation": ['zarr3', "gs://zapbench-release/volumes/20240930/segmentation_xy"],
+    "zap_traces": ['zarr3', 'gs://zapbench-release/volumes/20240930/traces'],
+    "zap_mece_pretectum": ['neuroglancer_precomputed', 'gs://fish2-derived/mece_250317/mece2'],
+    "fish1_somas": ['neuroglancer_precomputed', 'gs://fish1-public/lores_cbs_231218'],
+    "fish1_nt": ['n5', 'gs://fish1-public/confocal_231218.n5/s0'],
+}
+
+LAYERS = {
+    "zap_segmentation": ["gs://zapbench-release/volumes/20240930/segmentation_xy_multiscale/|zarr3:", "segmentation", False],
+    "zap_anatomy": ["gs://zapbench-release/volumes/20240930/anatomy_clahe_ds_multiscale/|zarr3:", "image", False],
+}
 
 VOLUME_LIMS = {
     "x_min": 430,
@@ -26,39 +61,19 @@ VOLUME_LIMS = {
     "z_max": 19,    # exclusive
 }
 
-# VOLUME_LIMS = {
-#     "x_min": 700,
-#     "x_max": 951,
-#     "y_min": 450,
-#     "y_max": 851,
-#     "z_min": 15,
-#     "z_max": 36,
-# }
+VOLUME_LIMS_2 = {
+    "x_min": 520,
+    "x_max": 620,   # exclusive
+    "y_min": 675,
+    "y_max": 775,   # exclusive
+    "z_min": 10,
+    "z_max": 14,    # exclusive
+}
 
-NULL_TRANSFORM = [
-    [1,0,0,0],
-    [0,1,0,0],
-    [0,0,1,0],
-]
+# main_dir = "/Users/aljoscha/Downloads/fish2"
+main_dir = "/Users/aljoscha/Downloads/fish22"
 
-TRANSFORMATION_MATRIX_EM = [
-    [1,0,0,-450],
-    [0,1,0,-450],
-    [0,0,-1,74],
-]
-
-LAYERS = [
-    # naturally aligned comes from same imaging
-    ["zap_bench_segmentation", "gs://zapbench-release/volumes/20240930/segmentation_xy_multiscale/|zarr3:", "segmentation", NULL_TRANSFORM, False],
-    ["zapbench_anatomy", "gs://zapbench-release/volumes/20240930/anatomy_clahe_ds_multiscale/|zarr3:", "image", NULL_TRANSFORM, False],
-    # bad alignment
-    # ["em_8nm", "precomputed://gs://fish2-derived/em_sofima_240112", "image", TRANSFORMATION_MATRIX_EM, False],
-    # ["brain_shell", "precomputed://gs://fish2-derived/fish2-brain-shell", "segmentation", TRANSFORMATION_MATRIX_EM, False],
-    # ["mece0", "precomputed://gs://fish2-derived/mece_250317/mece0", "segmentation", TRANSFORMATION_MATRIX_EM, False],
-    # ["mece1", "precomputed://gs://fish2-derived/mece_250317/mece1", "segmentation", TRANSFORMATION_MATRIX_EM, False],
-    # ["mece2", "precomputed://gs://fish2-derived/mece_250317/mece2", "segmentation", TRANSFORMATION_MATRIX_EM, False],
-    # ["mece3", "precomputed://gs://fish2-derived/mece_250317/mece3", "segmentation", TRANSFORMATION_MATRIX_EM, False],
-]
+PATHS = Paths(Path(main_dir))
 
 THALAMIC_DS_ZAP_ID = [
 7556,
@@ -105,66 +120,4 @@ THALAMIC_DS_ZAP_ID = [
 19878
 ]
 
-PRETECTAL_DS_ZAP_ID = [
-22400,
-22179,
-32767,
-22145,
-22145,
-24239,
-22361,
-22361,
-22343,
-22343,
-22353,
-22342,
-9739,
-10183,
-9797,
-9831,
-9573,
-9573,
-9648,
-11559,
-9465,
-9481,
-9486,
-9525,
-9546,
-9572,
-9625,
-9627,
-9762,
-22006,
-22020,
-22336,
-22356,
-22360,
-22428,
-22499,
-24127,
-32743,
-9465,
-9481,
-9486,
-9525,
-9546,
-9572,
-9625,
-9627,
-9762,
-22006,
-22020,
-22336,
-22356,
-22360,
-22428,
-22499,
-24127,
-32743
-]
 
-NEURONS_DS_ZAP_ID = {
-    "Thalamus": set(THALAMIC_DS_ZAP_ID),
-    "Pretectum": set(PRETECTAL_DS_ZAP_ID),
-}

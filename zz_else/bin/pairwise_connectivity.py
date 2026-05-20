@@ -15,11 +15,6 @@ thalamic_mask = neurons_df["area"] == "Thalamus"
 pre_IDs = neurons_df.loc[pretectal_mask, "bodyId"].values
 post_IDs = neurons_df.loc[thalamic_mask, "bodyId"].values
 
-print(len(pre_IDs))
-print(pre_IDs)
-print(len(post_IDs))
-print(post_IDs)
-
 for pre_ID in tqdm(pre_IDs):
     for post_ID in post_IDs:
 
@@ -39,3 +34,4 @@ for pre_ID in tqdm(pre_IDs):
             vec_post = neurons_df.loc[neurons_df["bodyId"] == post, ["DsXVec", "DsYVec"]].iloc[0].to_numpy()
             cos_sim = np.dot(vec_pre, vec_post) / (np.linalg.norm(vec_pre) * np.linalg.norm(vec_post))
             print(f"ZAP_ID: {zap_pre}-{zap_post}\nEM_ID: {pre}-{post}\npath_length={length}\ncos_sim={cos_sim}")
+

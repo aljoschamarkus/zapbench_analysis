@@ -2,7 +2,51 @@ import h5py as h5
 import numpy as np
 import scipy.ndimage as sciimg
 from config import *
-from utils import img_to_ng
+
+def img_to_ng(layers):
+    import neuroglancer as ng
+    from numpy import min, max
+    PORT = 8080
+    ng.set_server_bind_address("127.0.0.1", PORT)
+
+    in_dimensions = ng.CoordinateSpace(
+        names=["z", "y", "x"],
+        scales=[1, 1, 1],
+    )
+
+    out_dimensions = ng.CoordinateSpace(
+        names=["x", "y", "z"],
+        scales=[1, 1, 1],
+    )
+
+    matrix = [
+        [0, 0, 1, 0],
+        [0, 1, 0, 0],
+        [1, 0, 0, 0],
+    ]
+
+    viewer = ng.Viewer()
+
+    with viewer.txn() as s:
+        for name, img in layers.items():
+            img_scaled = (img-min(img))/(max(img)-min(img))
+            s.layers[name] = ng.ImageLayer(
+                source=ng.LayerDataSource(
+                    url=ng.LocalVolume(
+                        data=img_scaled,
+                        dimensions=in_dimensions,
+                    ),
+                    transform=ng.CoordinateSpaceTransform(
+                    matrix=matrix,
+                    output_dimensions=out_dimensions,
+                    )
+                )
+            )
+
+        s.layout = "xy"
+
+    print(viewer)
+    input("stop server...")
 
 f = h5.File(FUNCTIONAL_IMG_H5, "r")
 

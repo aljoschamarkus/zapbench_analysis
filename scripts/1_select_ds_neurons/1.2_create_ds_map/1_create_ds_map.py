@@ -3,9 +3,9 @@ import tifffile as tiff
 from config import *
 from utils import *
 
-condition_t, list_conditions = stimulus_indices(STIM_H5)
+stim_off_t, list_conditions = stimulus_indices(PATHS.in_data("zap_stimulus_turning.h5"))
 
-vector_x, vector_y = ds_vectors(path=FUNCTIONAL_IMG_H5, t_axis=3, condition_t=condition_t, list_conditions=list_conditions)
+vector_x, vector_y = ds_vectors(path=PATHS.in_data("zap_aligned_volume.h5"), t_axis=3, stim_off_t=stim_off_t, list_conditions=list_conditions)
 
 rgb_block = vector_to_rgb(vector_x, vector_y, threshold=99)
 rgb_block_transposed = np.transpose(rgb_block, (0, 2, 1, 3)) # (z, y, x, rgb)
@@ -22,4 +22,4 @@ vol[
     :
 ] = rgb_block_final
 
-tiff.imwrite(DS_MASK, vol)
+tiff.imwrite(PATHS.in_tiff("ds_map.tif"), vol)

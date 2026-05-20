@@ -9,3 +9,4 @@ neuprint-python
 neuroglancer
 fishfuncem
 scipy
+seaborn

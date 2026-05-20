@@ -1,12 +1,11 @@
 import numpy as np
-from pathlib import Path
 from tqdm import tqdm
 import h5py as h5
 from config import *
 
 z_slices = []
 
-for file in tqdm(sorted(Path(FUNCTIONAL_IMG_DIR).glob("*.h5"), key=lambda p: int(p.stem.split("_")[-1]))):
+for file in tqdm(sorted(PATHS.in_data("zapbench_aligned_slices").glob("*.h5"), key=lambda p: int(p.stem.split("_")[-1]))):
     path_str = str(file)
     print(path_str)
 
@@ -16,7 +15,6 @@ for file in tqdm(sorted(Path(FUNCTIONAL_IMG_DIR).glob("*.h5"), key=lambda p: int
     z_slices.append(z_slice)
 
 data = np.array(z_slices)
-print(data.shape)
-
-with h5.File(FUNCTIONAL_IMG_H5, "w") as f:
+print("saving volume...")
+with h5.File(PATHS.in_data("zapbench_aligned_volume.h5"), "w") as f:
     dset = f.create_dataset("data", data=data, compression="gzip")
