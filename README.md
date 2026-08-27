@@ -231,7 +231,7 @@ $$I_{\text{EI}}=
 {\bar{a}_{\text{glut}}+\bar{a}_{\text{gaba}}}$$
 
 The selected popluation of 47 neurons had an almost equal amount of ipsi- and contralateraly projecting neurons.
-About a third of these were determined as glutamatergic, GABAergic and unknown respectively, according to manual classification.
+About a third of these were determined as glutamatergic, GABAergic and unknown respectively, according to automatic classification.
 Ipsilateral neurons are mostly glutamatergic with a few GABAergic neurons while contralateral neurons are almost exclusively GABAergic. The fraction of undetermined identity remained similar. 
 
 <p align="center">
