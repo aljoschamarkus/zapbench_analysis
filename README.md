@@ -297,7 +297,7 @@ This analysis part starts with a selection of ZAPBench neuron IDs acquired in th
 [1_download_traces.py](./scripts/2_zap_neurons_to_em_ng/1_download_traces.py) and [2_direction_selectivity_traces_new.py](./scripts/2_zap_neurons_to_em_ng/2_direction_selectivity_traces_new.py) require [1_download_stimulus_turning.py](./scripts/1_select_ds_neurons/1_create_ds_mask/1_download_stimulus_turning.py) to be executed. 
 
 - To get the neuron selection in a clio neuroglancer run all scripts [2_zap_neurons_to_em_ng](./scripts/2_zap_neurons_to_em_ng) in order.
-- To use your selection adjust the code to: `df_neurons = ids_to_df_neurons(YOUR_LIST, id_type="zap")`
+- To use your selection adjust the code to: `df_neurons = ids_to_df_neurons(YOUR_LIST, id_type="zap")` in [3_zap_ids_to_em_ng.py](./scripts/2_zap_neurons_to_em_ng/3_zap_ids_to_em_ng.py).
 
 Afterwards the selection of neurons can be refined for example based on morphology or direction selectivity.
 
@@ -307,12 +307,12 @@ This analysis part starts with a selection of fish2 EM neuron IDs acquired in th
 The latter part requires a selection of neurons with their ZAPBench soma IDs and an indication of projection pattern as provided in `url_fish1_pretectal` in [config.py](./config.py).
 
 - To plot the cosine similarity between direction of selectivity of pretectal neurons connecting to selected thalamic neurons and the direction of selectivity of selected thalamic neurons run all scripts in [1_cosine_similarity_ds](./scripts/3_contralateral_inhibition/1_cosine_similarity_ds) in order.
-- To use your thalamic neuron selection define `THALAMIC_EM_IDS` as a list fish2 EM neuron IDs.
+- To use your thalamic neuron selection define `THALAMIC_EM_IDS` as a list fish2 EM neuron IDs in [config.py](config.py) or [3_connectivity_matrix](./scripts/3_contralateral_inhibition/1_cosine_similarity_ds/3_connectivity_matrix.py).
 
 **Note:** The pretectum mask might not be perfectly accurate.
 
 - To plot indications of neurotransmitter identity in relation to axonic projection patterns run the scripts in [2_fish1_neurotransmitter_identity](./scripts/3_contralateral_inhibition/2_fish1_neurotransmitter_identity).
-- To use your data generate a suitable csv and define `df = pd.read_csv("...path to your CSV...)`.
+- To use your data generate a suitable csv and define `df = pd.read_csv("...path to your CSV...)` in [1_fish1_neurotransmitter.py](./scripts/3_contralateral_inhibition/2_fish1_neurotransmitter_identity/1_fish1_neurotransmitter.py).
 
 The generated plots are stored in the subdirectory `"plots"` in the created `main_dir`.
 
