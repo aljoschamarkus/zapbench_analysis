@@ -238,6 +238,16 @@ Ipsilateral neurons are mostly glutamatergic with a few GABAergic neurons while 
   <img src="pngs/bar_chart.png" alt="mask_out" width="400">
 </p>
 
+## Summary
+
+- A **topographic map of direction selectivity** in the thalamus was recreated from functional imaging, consistent with previous findings in the lab ([Section 1](./scripts/1_select_ds_neurons), [Section 2](./scripts/2_zap_neurons_to_em_ng)).
+- Thalamic neurons of interest share a **common morphology and projection pattern** ipsilateral axonic projections into the tectal neuropil supporting their selection as a distinct population ([Section 2](./scripts/2_zap_neurons_to_em_ng)).
+- Two independent approaches converge on the same circuit motif: 
+  - **Connectivity-based** cosine similarity between up- and downstream direction selectivity vectors shows ipsilateral connections align in direction (excitatory) and contralateral connections oppose (inhibitory).
+  - **Neurotransmitter identity** (fish1, *vglut2a*/*gad1b*) independently shows ipsilateral neurons are predominantly glutamatergic and contralateral neurons almost exclusively GABAergic.
+  
+  Together these indicate a **local positive feedback / global negative feedback motif** underlying direction selectivity in the thalamic circuit ([Section 3](./scripts/3_contralateral_inhibition)).
+
 ## Usage
 
 The code used for the above is contained in python scripts in the directory [scripts](./scripts) and is divided in 3 subdirectories.
