@@ -12,19 +12,12 @@ class Paths:
             self._create_dirs()
 
     def _create_dirs(self):
-
         for path in [
-
             self.base,
-
             self.data,
-
             self.tiff,
-
             self.neurons,
-
             self.plots,
-
         ]:
             path.mkdir(parents=True, exist_ok=True)
 
@@ -36,6 +29,10 @@ class Paths:
         return self.neurons / name
     def in_plots(self, name):
         return self.plots / name
+
+main_dir = "/Users/aljoscha/Downloads/fish22"
+
+PATHS = Paths(Path(main_dir))
 
 GS = {
     "zap_stimuli": ['zarr', 'gs://zapbench-release/volumes/20240930/stimuli_features'],
@@ -52,6 +49,11 @@ LAYERS = {
     "zap_anatomy": ["gs://zapbench-release/volumes/20240930/anatomy_clahe_ds_multiscale/|zarr3:", "image", False],
 }
 
+# Exmaple Data
+
+url_fish2_thalamic = "https://docs.google.com/spreadsheets/d/13QOqf9SwgmFEzKOpOkgT1OJyPlZ-wxlZ5IZdEuoR2ag/export?format=csv&gid=0"
+url_fish1_pretectal = "https://docs.google.com/spreadsheets/d/13QOqf9SwgmFEzKOpOkgT1OJyPlZ-wxlZ5IZdEuoR2ag/export?format=csv&gid=1140184864"
+
 VOLUME_LIMS = {
     "x_min": 430,
     "x_max": 710,   # exclusive
@@ -61,63 +63,6 @@ VOLUME_LIMS = {
     "z_max": 19,    # exclusive
 }
 
-VOLUME_LIMS_2 = {
-    "x_min": 520,
-    "x_max": 620,   # exclusive
-    "y_min": 675,
-    "y_max": 775,   # exclusive
-    "z_min": 10,
-    "z_max": 14,    # exclusive
-}
-
-# main_dir = "/Users/aljoscha/Downloads/fish2"
-main_dir = "/Users/aljoscha/Downloads/fish22"
-
-PATHS = Paths(Path(main_dir))
-
-THALAMIC_DS_ZAP_ID = [
-7556,
-19975,
-21691,
-21516,
-20026,
-7638,
-7556,
-8972,
-8972,
-8986,
-20085,
-19883,
-8914,
-19893,
-21484,
-7638,
-21513,
-8969,
-8999,
-31816,
-7715,
-8925,
-8938,
-8924,
-7589,
-8925,
-19878,
-21508,
-21697,
-19975,
-21506,
-21490,
-8924,
-19806,
-8925,
-19767,
-21452,
-7650,
-21644,
-19883,
-19893,
-19878
-]
+THALAMIC_EM_IDS = [100459637, 100489572, 100554843, 100606891, 100872084, 100960836, 101375512, 101655767, 101905119, 102763559, 104512644, 105340332, 106132947, 106196373, 109686908]
 
 

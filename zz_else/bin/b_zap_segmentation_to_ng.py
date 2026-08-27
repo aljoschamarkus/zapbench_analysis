@@ -1,6 +1,5 @@
 import tensorstore as ts
 import numpy as np
-from config import *
 import scipy.ndimage as sciimg
 from pathlib import Path
 import tifffile

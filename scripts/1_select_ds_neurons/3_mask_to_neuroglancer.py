@@ -7,9 +7,6 @@ PORT = 8080
 
 ng.set_server_bind_address("127.0.0.1", PORT)
 
-ds_map = tifffile.imread(PATHS.in_tiff("ds_map.tif")) # shape: (z, y, x, c)
-ds_map_outline = tifffile.imread(PATHS.in_tiff("ds_map_outlines.tif"))
-
 input_dimensions = ng.CoordinateSpace(
     names=["z", "y", "x", "c^"],
     units=["nm", "nm", "nm", ""],
@@ -45,72 +42,82 @@ matrix_mask_mike = [
     [0, 0, 0, 1, 0]
 ]
 
+ds_map = None
+if PATHS.in_tiff("ds_map.tif").exists():
+    ds_map = tifffile.imread(PATHS.in_tiff("ds_map.tif")) # shape: (z, y, x, c)
+
+ds_map_outline = None
+if PATHS.in_tiff("ds_map_outlines.tif").exists():
+    ds_map_outline = tifffile.imread(PATHS.in_tiff("ds_map_outlines.tif"))
+
 colormapbigfull_flipped = None
-colormapbigfull_outlines_flipped = None
 if PATHS.in_tiff("colormapbigfull.tif").exists():
     colormapbigfull = tifffile.imread(PATHS.in_tiff("colormapbigfull.tif"))
     colormapbigfull_flipped = np.flip(colormapbigfull, axis=2)
+
+colormapbigfull_outlines_flipped = None
 if PATHS.in_tiff("colormapbigfull_outlines.tif").exists():
     colormapbigfull_outlines = tifffile.imread(PATHS.in_tiff("colormapbigfull_outlines.tif"))
     colormapbigfull_outlines_flipped = np.flip(colormapbigfull_outlines, axis=2)
-    # colormapbigfull_outlines_flipped = colormapbigfull_outlines.copy()
 
 VISIBLE = {
     "custom_map": False,
     "custom_map_outlines": False,
     "colormapbigfull": False,
-    "ds_mask_outlines": True,
+    "colormapbigfull_outlines": True,
 }
 
 viewer = ng.Viewer()
 
 with viewer.txn() as s:
 
-    s.layers["custom_map"] = ng.ImageLayer(
-        source=ng.LayerDataSource(
-            url=ng.LocalVolume(
-                data=ds_map,
-                dimensions=input_dimensions,
-                volume_type="image",
+    if ds_map is not None:
+        s.layers["ds_map"] = ng.ImageLayer(
+            source=ng.LayerDataSource(
+                url=ng.LocalVolume(
+                    data=ds_map,
+                    dimensions=input_dimensions,
+                    volume_type="image",
+                ),
+                transform=ng.CoordinateSpaceTransform(
+                    matrix=matrix_mask,
+                    output_dimensions=output_dimensions,
+                ),
             ),
-            transform=ng.CoordinateSpaceTransform(
-                matrix=matrix_mask,
-                output_dimensions=output_dimensions,
-            ),
-        ),
-        shader="""
-            void main() {
-              emitRGB(vec3(
-                toNormalized(getDataValue(0)),
-                toNormalized(getDataValue(1)),
-                toNormalized(getDataValue(2))
-              ));
-            }
-            """,
-    )
+            shader="""
+                void main() {
+                  emitRGB(vec3(
+                    toNormalized(getDataValue(0)),
+                    toNormalized(getDataValue(1)),
+                    toNormalized(getDataValue(2))
+                  ));
+                }
+                """,
+        )
 
-    s.layers["custom_map_outlines"] = ng.ImageLayer(
-        source=ng.LayerDataSource(
-            url=ng.LocalVolume(
-                data=ds_map_outline,
-                dimensions=input_dimensions,
-                volume_type="image",
+    if ds_map_outline is not None:
+        s.layers["ds_map_outlines"] = ng.ImageLayer(
+            source=ng.LayerDataSource(
+                url=ng.LocalVolume(
+                    data=ds_map_outline,
+                    dimensions=input_dimensions,
+                    volume_type="image",
+                ),
+                transform=ng.CoordinateSpaceTransform(
+                    matrix=matrix_mask,
+                    output_dimensions=output_dimensions,
+                ),
             ),
-            transform=ng.CoordinateSpaceTransform(
-                matrix=matrix_mask,
-                output_dimensions=output_dimensions,
-            ),
-        ),
-        shader="""
-            void main() {
-              emitRGB(vec3(
-                toNormalized(getDataValue(0)),
-                toNormalized(getDataValue(1)),
-                toNormalized(getDataValue(2))
-              ));
-            }
-            """,
-    )
+            shader="""
+                void main() {
+                  emitRGB(vec3(
+                    toNormalized(getDataValue(0)),
+                    toNormalized(getDataValue(1)),
+                    toNormalized(getDataValue(2))
+                  ));
+                }
+                """,
+        )
 
     if colormapbigfull_flipped is not None:
         s.layers["colormapbigfull"] = ng.ImageLayer(
@@ -137,7 +144,7 @@ with viewer.txn() as s:
         )
 
     if colormapbigfull_outlines_flipped is not None:
-        s.layers["ds_mask_outlines"] = ng.ImageLayer(
+        s.layers["colormapbigfull_outlines"] = ng.ImageLayer(
             source=ng.LayerDataSource(
                 url=ng.LocalVolume(
                     data=colormapbigfull_outlines_flipped,

@@ -1,5 +1,3 @@
-from utils import *
-
 tests = [
     (1, 0),
     (1, -1),

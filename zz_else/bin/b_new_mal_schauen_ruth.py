@@ -1,10 +1,8 @@
 import neuprint as neu
 import h5py as h5
 from private import AUTH_TOKEN
-from config import *
 from utils import *
 from fishfuncem.em.NeuprintServer import NeuprintServer
-import pandas as pd
 from janelia_neuroglancer import janelia_neuroglancer
 
 id = 7638

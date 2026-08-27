@@ -5,8 +5,6 @@ matplotlib.use("MacOSX")   # or TkAgg, WXAgg, MacOSX
 import scipy.ndimage as sciimg
 import matplotlib.pyplot as plt
 
-from config import *
-
 f = h5.File(ACTIVITY_CORRELATION_H5, "r")
 corr_map = f['data'][:,:]
 

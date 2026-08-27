@@ -1,10 +1,8 @@
 import neuprint as neu
 import h5py as h5
 from private import AUTH_TOKEN
-from config import *
 from utils import *
 from fishfuncem.em.NeuprintServer import NeuprintServer
-import numpy as np
 import pandas as pd
 import os
 

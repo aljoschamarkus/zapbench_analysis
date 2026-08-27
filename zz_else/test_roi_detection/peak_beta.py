@@ -5,7 +5,6 @@ matplotlib.use("MacOSX")
 import matplotlib.pyplot as plt
 import heapq
 
-from config import *
 from skimage.filters import threshold_otsu
 from skimage.feature import peak_local_max
 from skimage.morphology import remove_small_objects

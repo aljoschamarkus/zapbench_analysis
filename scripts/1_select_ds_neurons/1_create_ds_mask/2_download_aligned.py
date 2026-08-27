@@ -3,7 +3,6 @@ import tensorstore as ts
 from tqdm import tqdm
 import h5py as h5
 from config import *
-import os
 
 out_dir = PATHS.in_data("zap_aligned_slices")
 out_dir.mkdir(parents=True, exist_ok=True)

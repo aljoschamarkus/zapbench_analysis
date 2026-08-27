@@ -1,7 +1,7 @@
 import h5py as h5
 import numpy as np
 import scipy.ndimage as sciimg
-from config import *
+
 
 def img_to_ng(layers):
     import neuroglancer as ng

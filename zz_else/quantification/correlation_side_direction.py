@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from config import *
 
 vector_left = [0, -1]
 # vector_left = [1, 0]

@@ -1,14 +1,23 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from config import PATHS
+from config import *
 
-path = "/Users/aljoscha/Downloads/zapbench_data_thalamus/ds_thalamic_neurons - pretectal_fish1.csv"
-df = pd.read_csv(path)
+if PATHS.in_neurons("pretectal_fish1.csv").exists():
+    df = pd.read_csv(PATHS.in_neurons("pretectal_fish1.csv"))
+else:
+    import requests
+    from io import StringIO
+
+    r = requests.get(url_fish1_pretectal)
+    r.raise_for_status()
+    df = pd.read_csv(StringIO(r.text))
 
 mask_contra = df["contralateral"]
-mask_GABA = df["neurotransmitter"] == "GABA"
-mask_Glut = df["neurotransmitter"] == "Glut"
+# mask_GABA = df["neurotransmitter"] == "GABA"
+mask_GABA = df["nt_automatic"] == "GABA"
+# mask_Glut = df["neurotransmitter"] == "Glut"
+mask_Glut = df["nt_automatic"] == "Glut"
 mask_neither = ~mask_GABA & ~mask_Glut
 
 df_contra = df.loc[mask_contra]
@@ -47,7 +56,6 @@ p2 = ax[0].bar("all", len(df_ispsi)/len(df), width, label="ipsi", bottom=0, colo
 p3 = ax[0].bar("all", len(df_contra)/len(df), width, label="contra", bottom=len(df_contra)/len(df), color=(255/255, 127/255, 14/255))
 
 # fig.suptitle('Potentially direction selective pretectal neurons (N=47)', fontsize=16)
-# ax[1].legend(loc="upper right")
 ax[1].legend(loc="upper left", bbox_to_anchor=(-0.9, 0.4), fontsize=16)
 ax[1].set_title("neurotransmitter identity", fontsize=16)
 ax[1].tick_params(labelsize=16)

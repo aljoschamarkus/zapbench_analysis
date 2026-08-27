@@ -1,7 +1,6 @@
 import neuprint as neu
 import numpy as np
 from private import AUTH_TOKEN
-from config import *
 import pandas as pd
 from tqdm import tqdm
 
