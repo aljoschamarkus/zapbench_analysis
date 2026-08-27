@@ -89,12 +89,12 @@ The entire logic behind quantifying direction selectivity is based on Mike Orger
 
 In this project previous work in the lab found direction selective neurons in both the pretectum and the thalamus. 
 While the pretectal population is rather mixed in the thalamus they make up a topographic map of direction selectivity.
-It is known that the flow of visual information in the zebrafish is passed on from the retina by Retinal Ganglion Cells (RGC) to the Arborization Fields (AF) especially AF5 is involved in processing direction selective information.
+It is known that the flow of visual information in the zebrafish is passed on from the retina by Retinal Ganglion Cells (RGC) to the Arborization Fields (AF) especially AF5 is involved in processing direction selective information ([Kramer et al., 2019](https://doi.org/10.1016/j.neuron.2019.04.018)).
 
 With the availability of a whole brain functional imaging and a corresponding electron microscopy (EM) dataset new opportunities for investigating circuit motifs arise.
 Initially a method of determining direction selectivity of neurons was established with the functional imaging, from there on neurons of interest were identified and finally translated into the EM dataset.
 There the neuron selection was refined based on morphology and projection patterns. Within the connectome input cells and eventually circuit motives were analysed mostly limited to pretectal populations.
-By using direct connectivity alongside direction selectivity information a hypothesis about the sign of ipsi- and contralateral projections could be formed which could then be further supported by neurotransmitter analysis in the fish1 dataset
+By using direct connectivity alongside direction selectivity information a hypothesis about the sign of ipsi- and contralateral projections could be formed which could then be further supported by neurotransmitter analysis in the fish1 dataset.
 
 ### [1. Finding direction selective neurons](./scripts/1_select_ds_neurons) 
 
