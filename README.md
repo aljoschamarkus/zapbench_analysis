@@ -299,12 +299,12 @@ Afterwards the selection of neurons can be refined for example based on morpholo
 This analysis part starts with a selection of fish2 EM neuron IDs acquired in the previous [section](./scripts/2_zap_neurons_to_em_ng) an exemplary selection is provided as `THALAMIC_EM_IDS` in [config.py](./config.py).
 The latter part requires a selection of neurons with their ZAPBench soma IDs and an indication of projection pattern as provided in `url_fish1_pretectal` in [config.py](./config.py).
 
-- To plot the cosine similarity between direction of selectivity of pretectal neurons connecting to selected thalamic neurons and the direction of selectivity of selected thalamic neurons run script 1-3.
+- To plot the cosine similarity between direction of selectivity of pretectal neurons connecting to selected thalamic neurons and the direction of selectivity of selected thalamic neurons run all scripts in [1_cosine_similarity_ds](./scripts/3_contralateral_inhibition/1_cosine_similarity_ds) in order.
 - To use your thalamic neuron selection define `THALAMIC_EM_IDS` as a list fish2 EM neuron IDs.
 
 **Note:** The pretectum mask might not be perfectly accurate.
 
-- To plot indications of neurotransmitter identity in relation to axonic projection patterns run script 4 and 5.
+- To plot indications of neurotransmitter identity in relation to axonic projection patterns run the scripts in [2_fish1_neurotransmitter_identity](./scripts/3_contralateral_inhibition/2_fish1_neurotransmitter_identity).
 - To use your data generate a suitable csv and define `df = pd.read_csv("...path to your CSV...)`.
 
 The generated plots are stored in the subdirectory `"plots"` in the created `main_dir`.
