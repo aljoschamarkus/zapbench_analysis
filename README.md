@@ -6,11 +6,18 @@ This projects analyses direction selectivity in the zebrafish visual thalamus ba
 - [**Neuprint authorization key**](https://neuprint-fish2.janelia.org/account)
 - [**fishFuncEM package**](https://github.com/ahrens-fish-lab/fishFuncEM.git) (private repository - shows 404 without access)
 
-For both of the above access has to be requested. Section [1_select_ds_neurons](./scripts/1_select_ds_neurons) can be used without both of them for the others ([2_zap_neurons_to_em_ng](./scripts/2_zap_neurons_to_em_ng), [3_contralateral_inhibition](./scripts/3_contralateral_inhibition)) require the above. 
+Access must be requested for both. [Section 1](./scripts/1_select_ds_neurons) works without either, [Sections 2](./scripts/2_zap_neurons_to_em_ng) and [3](./scripts/3_contralateral_inhibition) require both
+
+Other packages used are listed in [requirements.txt](requirements.txt)
 
 ## Installation
 ```bash
 git clone https://github.com/aljoschamarkus/zapbench_analysis.git
+```
+
+```bash
+cd zapbench_analysis
+pip install -r requirements.txt
 ```
 
 ## Data sets
@@ -31,7 +38,7 @@ The data for the analysis in this project is from the following sources, the  Go
   - Segmentation (freely available)
   - Confocal imaging of *vglut2a* / *gad1b* (freely available)
 
-From the above only the segmentation and connectivity data of fish2 requires neuPrint authorisation, the rest is available without. Below is a summary specifying data shape, format and units. The driver column contains the driver used for reading the data with [tensorstore](https://google.github.io/tensorstore/).  
+From the above only the segmentation and connectivity data of fish2 requires neuPrint authorization, the rest is available without. Below is a summary specifying data shape, format and units. The driver column contains the driver used for reading the data with [tensorstore](https://google.github.io/tensorstore/).  
 
 | name    | shape             | dimensions       | units                        | driver                   |
 |---------|-------------------|------------------|------------------------------|--------------------------|
@@ -82,7 +89,7 @@ The entire logic behind quantifying direction selectivity is based on Mike Orger
 
 In this project previous work in the lab found direction selective neurons in both the pretectum and the thalamus. 
 While the pretectal population is rather mixed in the thalamus they make up a topographic map of direction selectivity.
-It is known that the flow of visual information in the zebrafish is passed on from the retina by Retinal Ganglion Cells (RGC) to the Aborization Fields (AF) especially AF5 is involved in processing direction selective information.
+It is known that the flow of visual information in the zebrafish is passed on from the retina by Retinal Ganglion Cells (RGC) to the Arborization Fields (AF) especially AF5 is involved in processing direction selective information.
 
 With the availability of a whole brain functional imaging and a corresponding electron microscopy (EM) dataset new opportunities for investigating circuit motifs arise.
 Initially a method of determining direction selectivity of neurons was established with the functional imaging, from there on neurons of interest were identified and finally translated into the EM dataset.
@@ -186,7 +193,7 @@ The selected population reveals a topographic map of direction selectivity in th
 To analyse the characteristics of the neural connections for a better understanding of the circuit calculations giving rise to direction selectivity, the relation of direction selectivity of connected neurons can be determined.<br>
 
 As potential inputs, based on the Mece 2 Pretectum mask, the IDs of all pretectal neurons were extracted.
-For better performance in a first step all neuron IDs were determined, within a bounding box based on the minimum and maximum position of maks voxels, by cypher query in the neuprint dataset.
+For better performance in a first step all neuron IDs were determined, within a bounding box based on the minimum and maximum position of mask voxels, by cypher query in the neuprint dataset.
 Afterwards based on position of the neurons soma membership of the pretectal mask was tested, only members were kept.
 
 Another query extracts direct axon to dendrite connections between the listed upstream and downstream neuron IDs. 
@@ -233,16 +240,16 @@ Ipsilateral neurons are mostly glutamatergic with a few GABAergic neurons while 
 
 ## Usage
 
-The code used for the above is contained in python scrips in the directory [scripts](./scripts) and is divided in 3 subdirectories.
+The code used for the above is contained in python scripts in the directory [scripts](./scripts) and is divided in 3 subdirectories.
 Each subdirectory is an individual part of the workflow that mostly works independent of the others, while some data is downloaded or generated once and then used across sections.
 
-The [turning stimulus data](./scripts/1_select_ds_neurons/1_create_ds_mask/1_download_stimulus_turning.py) ([section 1](./scripts/1_select_ds_neurons)) is a requirement to extract the relevant time bin of [traces](./scripts/2_zap_neurons_to_em_ng/1_download_traces.py) ([section 2](./zapbench_analysis/scripts/2_zap_neurons_to_em_ng)).
+The [turning stimulus data](./scripts/1_select_ds_neurons/1_create_ds_mask/1_download_stimulus_turning.py) ([section 1](./scripts/1_select_ds_neurons)) is a requirement to extract the relevant time bin of [traces](./scripts/2_zap_neurons_to_em_ng/1_download_traces.py) ([section 2](./scripts/2_zap_neurons_to_em_ng)).
 [Direction selectivity data](./scripts/2_zap_neurons_to_em_ng/2_direction_selectivity_traces_new.py) generated from the traces is then also used in [section 3](./scripts/3_contralateral_inhibition).
 Within a section the scripts are heavily dependent on each other and are supposed to be run in chronological order indicated by the name prefix. 
 
 The result of one section such as a selection of neurons of interest provides the starting point for the next section. 
 
-In this workflow project [part 1](./scripts/1_select_ds_neurons) works with or without the availability of [**colormapbigfull.tif**](https://drive.google.com/file/d/1ydAAZFxeUDRwJVTQHaeCtv_hAXIT3Az1/view?usp=drive_link) and requires no gated packages or authorisation to data sets.
+In this workflow project [part 1](./scripts/1_select_ds_neurons) works with or without the availability of [**colormapbigfull.tif**](https://drive.google.com/file/d/1ydAAZFxeUDRwJVTQHaeCtv_hAXIT3Az1/view?usp=drive_link) and requires no gated packages or authorization to data sets.
 For [part 2](./scripts/2_zap_neurons_to_em_ng) and the first 3 scripts of [part 3](./scripts/3_contralateral_inhibition) both is required, the last 2 scripts of part 3 work without again.
 
 In between sections manual selection of neurons of interest is required or advised.
@@ -268,7 +275,7 @@ Code that is used more than once time is defined in functions in [utils.py](./ut
 - To add ZAPBench soma segmentation outlines into the mask run all scripts in [2_add_outlines](./scripts/1_select_ds_neurons/2_add_outlines) in order.
 - To load the masks into a neuroglancer tab run [3_mask_to_neuroglancer.py](./scripts/1_select_ds_neurons/3_mask_to_neuroglancer.py) and open the printed link.
 
-Now select ZAPBench somas and coppy their IDs based on their direction selectivity. 
+Now select ZAPBench somas and copy their IDs based on their direction selectivity. 
 
 #### Notes
 
@@ -283,7 +290,7 @@ If no mask is available this script fails.
 
 The color coding in the masks is indicating relative direction selectivity with the value scaled in respect to the voxel with the highest direction selectivity magnitude in the selected volume, therefore the absolute color values of the same voxels for varying `VOLUME_LIMITS` can be different.  
 
-### [Section 2](./scripts/2_neurons_to_em_ng) - show neuron morphology
+### [Section 2](./scripts/2_zap_neurons_to_em_ng) - show neuron morphology
 
 This analysis part starts with a selection of ZAPBench neuron IDs acquired in the previous [section](./scripts/1_select_ds_neurons) an exemplary selection is provided in `url_fish2_thalamic` in [config.py](./config.py).
 
